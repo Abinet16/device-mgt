@@ -1,0 +1,96 @@
+// schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Neon connection string
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  role         Role
+  orgId        String
+  org          Org       @relation(fields: [orgId], references: [id])
+  devices      Device[]  @relation("UserDevices")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Org {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  users     User[]
+  devices   Device[]
+  policies  Policy[]
+}
+
+model Device {
+  id             String    @id @default(cuid())
+  orgId          String
+  org            Org       @relation(fields: [orgId], references: [id])
+  registeredById String?
+  registeredBy   User?     @relation("UserDevices", fields: [registeredById], references: [id])
+  name           String
+  serialNumber   String    @unique
+  platform       Platform
+  status         DeviceStatus @default(ONLINE)
+  lastHeartbeat  DateTime?
+  tags           Json?
+  policyId       String?
+  policy         Policy?   @relation(fields: [policyId], references: [id])
+  enrollmentToken String   @unique
+  enrolledAt     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  audits         AuditLog[]
+}
+
+model Policy {
+  id        String   @id @default(cuid())
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id])
+  name      String
+  // Example policy content
+  config    Json
+  devices   Device[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  orgId     String
+  deviceId  String?
+  userId    String?
+  category  String
+  action    String
+  detail    Json?
+  createdAt DateTime  @default(now())
+  device    Device?   @relation(fields: [deviceId], references: [id])
+  user      User?     @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  VIEWER
+}
+
+enum Platform {
+  WINDOWS
+  MACOS
+  LINUX
+  ANDROID
+  IOS
+}
+
+enum DeviceStatus {
+  ONLINE
+  OFFLINE
+  DECOMMISSIONED
+  MAINTENANCE
+}
