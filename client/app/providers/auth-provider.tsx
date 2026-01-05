@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 type AuthCtx = {
   token: string | null;
@@ -9,7 +9,14 @@ type AuthCtx = {
 const AuthContext = createContext<AuthCtx | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(localStorage.getItem("access"));
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("access");
+    if (stored) {
+      queueMicrotask(() => setToken(stored));
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ token, setToken }}>

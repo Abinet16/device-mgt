@@ -1,3 +1,4 @@
+// app/providers/socket-provider.tsx
 "use client";
 import { createContext, useContext, useEffect, useMemo } from "react";
 import { io, Socket } from "socket.io-client";
@@ -13,16 +14,17 @@ export function SocketProvider({
   children: React.ReactNode;
 }) {
   const { token } = useAuth();
-  const socket = useMemo(
-    () =>
-      io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
-        auth: { token },
-        transports: ["websocket"],
-      }),
-    [token]
-  );
+
+  const socket = useMemo(() => {
+    if (!token) return null;
+    return io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
+      auth: { token },
+      transports: ["websocket"],
+    });
+  }, [token]);
 
   useEffect(() => {
+    if (!socket) return;
     socket.emit("join_org", orgId);
     return () => socket.disconnect();
   }, [socket, orgId]);

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSocket } from "../providers/socket-provider";
-import { useApi } from "../../lib/api";
+import { useSocket } from "../../providers/socket-provider";
+import { useApi } from "../../../lib/api";
 
 type Device = {
   id: string;

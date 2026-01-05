@@ -1,13 +1,15 @@
 "use client";
-import { useState } from "react";
-import { useAuth } from "../providers/auth-provider";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../providers/auth-provider";
 
 export default function LoginPage() {
   const { setToken } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  useEffect(() => {
+    if (localStorage.getItem("access")) window.location.href = "/dashboard";
+  }, []);
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     try {
@@ -25,15 +27,11 @@ export default function LoginPage() {
       setError(err.message);
     }
   }
-
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-50">
-      <form
-        onSubmit={handleLogin}
-        className="bg-white p-6 rounded shadow w-96 space-y-4"
-      >
-        <h1 className="text-xl font-bold">Login</h1>
-        {error && <div className="text-red-500">{error}</div>}
+    <div className="bg-white shadow rounded p-6 w-96">
+      <h1 className="text-xl font-bold mb-4">Login</h1>
+      {error && <div className="text-red-500 mb-2">{error}</div>}
+      <form onSubmit={handleLogin} className="space-y-4">
         <input
           type="email"
           placeholder="Email"

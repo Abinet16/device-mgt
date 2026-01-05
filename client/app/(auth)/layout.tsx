@@ -1,9 +1,9 @@
-// app/layout.tsx
-import "./globals.css";
+import "../globals.css";
 import Link from "next/link";
-import { Providers } from "./providers";
+import { Providers } from "../providers";
+import LogoutButton from "../components/logout";
 
-export default function RootLayout({
+export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -13,7 +13,6 @@ export default function RootLayout({
       <body className="bg-gray-50 text-gray-900">
         <Providers>
           <div className="flex h-screen">
-            {/* Sidebar */}
             <aside className="w-64 bg-white shadow-md p-4 flex flex-col">
               <h1 className="text-2xl font-bold mb-6">Device Manager</h1>
               <nav className="flex flex-col space-y-2">
@@ -35,17 +34,12 @@ export default function RootLayout({
                 <Link href="/audits" className="hover:bg-gray-100 p-2 rounded">
                   Audits
                 </Link>
-                <Link
-                  href="/login"
-                  className="hover:bg-gray-100 p-2 rounded mt-auto"
-                >
-                  Logout
-                </Link>
               </nav>
+              <div className="mt-auto">
+                <LogoutButton />
+              </div>
             </aside>
-
-            {/* Main content */}
-            <main className="flex-1 overflow-y-auto">{children}</main>
+            <main className="flex-1 overflow-y-auto p-6">{children}</main>
           </div>
         </Providers>
       </body>
