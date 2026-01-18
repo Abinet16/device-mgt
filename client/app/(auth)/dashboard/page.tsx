@@ -289,11 +289,10 @@ function NavItem({
   return (
     <a
       href="#"
-      className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-        active
+      className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${active
           ? "bg-indigo-600 text-white shadow-lg shadow-indigo-900/20"
           : "text-slate-400 hover:text-white hover:bg-slate-800"
-      }`}
+        }`}
     >
       {icon}
       {label}
