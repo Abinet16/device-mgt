@@ -11,7 +11,7 @@ import policiesRouter from "./routes/policies";
 import auditsRouter from "./routes/audits";
 import devicesRouter from "./routes/devices";
 import { createSocket } from "./config/socket";
-import  {startHeartbeatMonitor} from "./jobs/heartbeatMoniter";
+import  {startHeartbeatMonitor} from "./jobs/heartbeatMonitor";
 
 const app = express();
 const server = http.createServer(app);
