@@ -70,7 +70,7 @@ export const deviceService = {
 
     const updated = await deviceRepo.update(id, {
       status: status ?? device.status,
-      lastHeartbeat: heartbeat ? new Date() : device.lastHeartbeat,
+      lastHeartbeat: heartbeat ? new Date() : device.lastHeartbeat ?? new Date(0),
     });
     await auditRepo.log({
       orgId,

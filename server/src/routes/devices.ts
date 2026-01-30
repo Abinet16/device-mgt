@@ -13,7 +13,7 @@ export default function devicesRouter(io: SocketIOServer) {
     name: z.string().min(2),
     serialNumber: z.string().min(3),
     platform: z.enum(["WINDOWS","MACOS","LINUX","ANDROID","IOS"]),
-    tags: z.record(z.any()).optional()
+    tags: z.record(z.any(), z.string()).optional()
   });
 
   const statusSchema = z.object({

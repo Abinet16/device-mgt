@@ -8,11 +8,11 @@ const router = Router();
 
 const createSchema = z.object({
   name: z.string().min(2),
-  config: z.record(z.any()),
+  config: z.record(z.string(), z.any()),
 });
 const updateSchema = z.object({
   name: z.string().min(2).optional(),
-  config: z.record(z.any()).optional(),
+  config: z.record(z.string(), z.any()).optional(),
 });
 const assignSchema = z.object({ policyId: z.string().nullable() });
 
