@@ -4,24 +4,25 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id           String    @id @default(cuid())
+  id           String    @id @default(cuid()) @map("_id")
   email        String    @unique
   passwordHash String
   role         Role
   orgId        String
   org          Org       @relation(fields: [orgId], references: [id])
   devices      Device[]  @relation("UserDevices")
+  audits       AuditLog[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }
 
 model Org {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @map("_id")
   name      String   @unique
   users     User[]
   devices   Device[]
@@ -29,7 +30,7 @@ model Org {
 }
 
 model Device {
-  id             String    @id @default(cuid())
+  id             String    @id @default(cuid()) @map("_id")
   orgId          String
   org            Org       @relation(fields: [orgId], references: [id])
   registeredById String?
@@ -50,7 +51,7 @@ model Device {
 }
 
 model Policy {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @map("_id")
   orgId     String
   org       Org      @relation(fields: [orgId], references: [id])
   name      String
@@ -62,7 +63,7 @@ model Policy {
 }
 
 model AuditLog {
-  id        String   @id @default(cuid())
+  id        String   @id @default(cuid()) @map("_id")
   orgId     String
   deviceId  String?
   userId    String?

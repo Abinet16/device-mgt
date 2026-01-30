@@ -11,9 +11,18 @@ export function authenticate(req: Request, res: Response, next: NextFunction) {
   const header = req.headers.authorization;
   if (!header?.startsWith("Bearer "))
     return res.status(401).json({ error: "Unauthorized" });
+  
+  const jwtSecret = process.env.JWT_SECRET;
+  if (!jwtSecret) {
+    return res.status(500).json({ error: "Server configuration error" });
+  }
+  
   try {
     const token = header.split(" ")[1];
-    const payload = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    if (!token) {
+      return res.status(401).json({ error: "Invalid token format" });
+    }
+    const payload = jwt.verify(token, jwtSecret) as unknown as JwtPayload;
     (req as any).user = payload;
     next();
   } catch {
