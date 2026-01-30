@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { ApiHealthIndicator } from "./components/api-health-indicator";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,6 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.className} antialiased bg-slate-50 text-slate-900`}>
         {children}
+        <ApiHealthIndicator />
       </body>
     </html>
   );

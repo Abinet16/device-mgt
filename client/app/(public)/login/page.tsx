@@ -39,12 +39,12 @@ export default function LoginPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(
-          data.message || "Invalid credentials. Please try again."
-        );
+        const errorMessage = data.error?.message || data.message || "Invalid credentials. Please try again.";
+        throw new Error(errorMessage);
       }
 
-      const { access } = await res.json();
+      const responseData = await res.json();
+      const { access } = responseData;
       localStorage.setItem("access", access);
       setToken(access);
 
