@@ -22,6 +22,9 @@ export const deviceController = (io: SocketIOServer) => ({
     const { orgId } = (req as any).user;
     const { id } = req.params;
     const { token } = req.body;
+      if (!id) {
+        return res.status(400).json({ error: "device ID is required" });
+      }
     const device = await deviceService.enroll(id, token, orgId);
     io.to(`org:${orgId}`).emit("device_enrolled", device);
     res.json(device);
@@ -29,6 +32,9 @@ export const deviceController = (io: SocketIOServer) => ({
   updateStatus: async (req: Request, res: Response) => {
     const { orgId } = (req as any).user;
     const { id } = req.params;
+     if (!id) {
+       return res.status(400).json({ error: "Device ID is required" });
+     }
     const { status, heartbeat } = (req as any).parsed;
     const updated = await deviceService.updateStatus(
       id,
@@ -46,6 +52,9 @@ export const deviceController = (io: SocketIOServer) => ({
   delete: async (req: Request, res: Response) => {
     const { orgId, userId } = (req as any).user;
     const { id } = req.params;
+     if (!id) {
+       return res.status(400).json({ error: "Device ID is required" });
+     }
     await deviceService.delete(id, orgId, userId);
     io.to(`org:${orgId}`).emit("device_deleted", { id });
     res.status(204).send();

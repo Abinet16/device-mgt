@@ -13,9 +13,12 @@ export const policyController = {
     const policy = await policyService.create(orgId, userId, name, config);
     res.status(201).json(policy);
   },
-  update: async (req: Request, res: Response) => {
+update: async (req: Request, res: Response) => {
     const { orgId, userId } = (req as any).user;
     const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "Policy ID is required" });
+    }
     const policy = await policyService.update(
       id,
       orgId,
@@ -24,15 +27,21 @@ export const policyController = {
     );
     res.json(policy);
   },
-  delete: async (req: Request, res: Response) => {
+delete: async (req: Request, res: Response) => {
     const { orgId, userId } = (req as any).user;
     const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "Policy ID is required" });
+    }
     await policyService.delete(id, orgId, userId);
     res.status(204).send();
   },
-  assignToDevice: async (req: Request, res: Response) => {
+assignToDevice: async (req: Request, res: Response) => {
     const { orgId, userId } = (req as any).user;
     const { deviceId } = req.params;
+    if (!deviceId) {
+      return res.status(400).json({ error: "Device ID is required" });
+    }
     const { policyId } = (req as any).parsed;
     const device = await policyService.assignToDevice(
       deviceId,
